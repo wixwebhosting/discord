@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Captcha.bot - Verification done right</title>
+        <meta name="description" content="Discord verification page lookalike for local testing." />
+        <link rel="icon" href="icon.png">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            :root { --discord:#5865f2; }
+            .bg-discord { background-color: var(--discord); }
+            .hover\:bg-discord-10:hover { background-color: #4752c4; }
+            /* Minimal modal styles (kept from previous implementation) */
+            .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,.6)}
+            .modal-content{background:#111827;color:#e5e7eb;margin:8% auto;padding:20px;border-radius:12px;width:92%;max-width:420px;text-align:center;position:relative;border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+            .close{position:absolute;right:1rem;top:1rem;font-size:24px;cursor:pointer;color:#9ca3af}
+            .captcha-box{border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:14px;display:flex;align-items:center;gap:12px;justify-content:center;background:#0f172a}
+            .verify-complete-btn{background:var(--discord);color:#fff;border:none;padding:12px 16px;border-radius:10px;font-weight:600;width:100%}
+            .verify-complete-btn:disabled{background:#374151}
+        </style>
+    </head>
+    <body class="bg-slate-900 text-gray-100">
+        <!-- Top nav -->
+        <header class="mx-auto hidden md:flex justify-between pt-4 pr-8 pl-8">
+            <div class="flex items-center space-x-7">
+                        <a href="#" aria-label="Captcha.bot home">
+                            <img alt="logo" class="pt-0 mt-0" height="60" width="60" src="icon.png" />
+                </a>
+                <a class="text-gray-300 hover:text-white" href="https://docs.captcha.bot/">Documentation</a>
+                <a class="text-gray-300 hover:text-white" href="https://captcha.bot/premium">Pricing</a>
+                <a class="text-gray-300 hover:text-white" href="https://discordbotlist.com/bots/server-captcha-bot/upvote">Vote</a>
+            </div>
+            <!-- Login button removed -->
+        </header>
+
+        <!-- Mobile nav -->
+        <div class="mx-auto justify-between py-3 pr-8 pl-5 block md:hidden bg-gray-900">
+            <div class="flex items-center justify-between space-x-7">
+                <a href="#" class="flex items-center gap-2">
+                      <img alt="logo" class="pt-0 mt-0" height="50" width="50" src="icon.png" />
+                    <h1 class="text-white text-2xl font-extrabold">Captcha.bot</h1>
+                </a>
+                <div class="text-gray-200 hover:text-white cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main grid -->
+        <div class="container lg:px-8 xl:px-32 md:mx-auto px-4 grid grid-cols-1 md:grid-cols-3 md:gap-6 mt-8">
+            <!-- left column -->
+            <div>
+                <!-- server card -->
+            <div class="bg-gray-900 rounded-lg shadow-2xl break-words mb-4 server-card">
+                    <div class="flex gap-3 px-4 py-4">
+                        <img style="display:block" alt="servername here" class="guild-icon h-20 rounded-md" src="https://placehold.co/128x128/png" />
+                        <div class="inline-block w-full break-all">
+                            <h1 class="text-white text-xl font-extrabold">Discord server</h1>
+                            <p class="text-gray-300 text-sm member-count">6482 members</p>
+                        </div>
+                    </div>
+                    <p class="px-4 pt-2 pb-6 text-gray-300">This server requires you to verify you are a human before you can interact. This'll only take a few moments!</p>
+                    <div class="px-4 py-4">
+                        <span class="flex gap-2 justify-center items-center">
+                            <a class="cursor-pointer block bg-discord hover:bg-discord-10 rounded-lg shadow-lg text-white text-center py-2 text-base px-4 font-semibold w-full">
+                                <div class="flex items-center justify-center gap-2">
+                                    <svg aria-hidden="true" class="hidden w-5 h-5 text-gray-100 animate-spin fill-discord" id="loadingSvg" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="white"></path></svg>
+                                    <button id="verifyBtn">Press to Verify</button>
+                                </div>
+                            </a>
+                        </span>
+                        <div class="flex gap-3 pt-3">
+                            <a href="https://discord.com/invite/captcha" class="bg-discord hover:bg-discord-10 rounded-lg shadow-lg text-white text-center py-1.5 px-4 font-semibold w-full">Get help</a>
+                            <a href="https://privy.gg/legal" class="bg-gray-600 hover:bg-gray-700 rounded-lg shadow-lg text-white text-center py-1.5 px-4 font-semibold w-full"><span class="flex gap-2 justify-center"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.25" stroke="currentColor" class="w-5 h-5 mt-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg> Terms</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- advertise card -->
+            <div class="bg-gray-900 rounded-lg shadow-2xl break-words mb-4 ad-card">
+                    <div class="flex gap-3 px-4 pt-4 pb-2">
+                        <div class="flex items-start w-full">
+                            <h1 class="text-white text-lg font-extrabold">Advertise here...</h1>
+                            <div class="flex-grow"></div>
+                            <div class="bg-discord px-2 py-1 text-white text-sm font-semibold rounded-lg">Promoted</div>
+                        </div>
+                    </div>
+                    <p class="px-4 pb-2 text-gray-300">Advertise your Discord server, bot, or other product here. <sup>*</sup><span class="text-sm">Coming Q3 2024</span></p>
+                    <div class="px-4 pb-4 flex gap-2">
+                        <input type="email" class="rounded-md border border-gray-900 bg-slate-800 py-2 pl-3 shadow-sm text-sm text-white w-64" placeholder="Enter your email" />
+                        <button class="bg-discord hover:bg-discord-10 rounded-lg shadow-lg text-white text-center text-sm py-1.5 px-2 font-semibold" data-btn="waitlist">Join waitlist</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- right column -->
+            <div class="col-span-2">
+            <div class="bg-gray-900 rounded-lg shadow-2xl info-card">
+                    <div class="p-4">
+                        <h1 class="text-white text-xl font-semibold">Captcha.bot Information</h1>
+                        <p class="text-gray-300 text-base">Captcha.bot helps protect Discord servers and stop raids with quick human verification.</p>
+                        <div class="grid grid-cols-3 gap-3 pt-3">
+                            <a href="https://captcha.bot/premium" class="bg-discord hover:bg-discord-10 rounded-lg shadow-lg text-white text-center py-1.5 px-4 font-semibold w-full">Purchase Premium</a>
+                            <a href="https://discord.com/oauth2/authorize?client_id=512333785338216465&scope=bot%20applications.commands&permissions=268561430&response_type=code" class="bg-gray-600 hover:bg-gray-700 rounded-lg shadow-lg text-white text-center py-1.5 px-4 font-semibold w-full">Protect your server</a>
+                            <a href="https://x.com/discordcaptcha" class="bg-gray-600 hover:bg-gray-700 rounded-lg shadow-lg text-white text-center py-1.5 px-4 font-semibold w-full">Follow on Twitter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+    <!-- Verification Modal removed -->
+
+        <script src="script.js"></script>
+    </body>
+    </html>
+
