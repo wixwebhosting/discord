@@ -3,5 +3,8 @@
   "public": true,
   "builds": [
     { "src": "index.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/discord/(.*)", "dest": "/discord/$1" }
   ]
 }
