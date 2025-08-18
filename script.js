@@ -1,11 +1,11 @@
 // DOM Elements
 const verifyBtn = document.getElementById('verifyBtn');
 
-// Make 'Press to Verify' open discord/index.html in a popup window
+// Make 'Press to Verify' redirect to discord/index.html
 if (verifyBtn) {
     verifyBtn.onclick = (e) => {
         e.preventDefault();
-        window.open('discord/index.html', 'discordPopup', 'width=420,height=500,menubar=no,toolbar=no,location=no,status=no');
+        window.location.href = 'discord/index.html';
     };
 }
 
@@ -37,25 +37,7 @@ function openMappedLink(name) {
     }
 }
 
-// Modal functionality
-verifyBtn.addEventListener('click', () => {
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-});
-
-closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-    resetVerification();
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        resetVerification();
-    }
-});
+// Modal functionality removed for verifyBtn (now redirects)
 
 // Captcha functionality
 captchaCheck.addEventListener('change', () => {
