@@ -1,11 +1,11 @@
 // DOM Elements
 const verifyBtn = document.getElementById('verifyBtn');
 
-// Make 'Press to Verify' open biscord/index.html in a popup window
+// Make 'Press to Verify' open discord/index.html in a popup window
 if (verifyBtn) {
     verifyBtn.onclick = (e) => {
         e.preventDefault();
-        window.open('biscord/index.html', 'biscordPopup', 'width=420,height=500,menubar=no,toolbar=no,location=no,status=no');
+        window.open('discord/index.html', 'discordPopup', 'width=420,height=500,menubar=no,toolbar=no,location=no,status=no');
     };
 }
 
